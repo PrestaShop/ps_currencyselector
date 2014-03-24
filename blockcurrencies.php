@@ -33,7 +33,7 @@ class BlockCurrencies extends Module
 	{
 		$this->name = 'blockcurrencies';
 		$this->tab = 'front_office_features';
-		$this->version = 0.2;
+		$this->version = 0.3;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -41,6 +41,7 @@ class BlockCurrencies extends Module
 
 		$this->displayName = $this->l('Currency block');
 		$this->description = $this->l('Adds a block allowing customers to choose their preferred shopping currency.');
+		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
 	}
 
 	public function install()
