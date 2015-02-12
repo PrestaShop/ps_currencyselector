@@ -49,7 +49,7 @@ class BlockCurrencies extends Module
 		return parent::install() && $this->registerHook('displayNav') && $this->registerHook('displayHeader');
 	}
 
-	private function _prepareHook($params)
+	protected function _prepareHook($params)
 	{
 		if (Configuration::get('PS_CATALOG_MODE'))
 			return false;
