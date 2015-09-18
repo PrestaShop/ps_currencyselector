@@ -24,16 +24,18 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+use PrestaShop\PrestaShop\Core\Business\Module\WidgetInterface;
+
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class BlockCurrencies extends Module
+class BlockCurrencies extends Module implements WidgetInterface
 {
 	public function __construct()
 	{
 		$this->name = 'blockcurrencies';
 		$this->tab = 'front_office_features';
-		$this->version = '0.4.0';
+		$this->version = '2.0.0';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -41,50 +43,64 @@ class BlockCurrencies extends Module
 
 		$this->displayName = $this->l('Currency block');
 		$this->description = $this->l('Adds a block allowing customers to choose their preferred shopping currency.');
-		$this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+		$this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
 	}
 
-	public function install()
+	public function getWidgetVariables($hookName, array $configuration)
 	{
-		return parent::install() && $this->registerHook('displayNav') && $this->registerHook('displayHeader');
+		$current_currency = null;
+		$serializer = new Adapter_ObjectSerializer;
+		$currencies = array_map(
+			function ($currency) use ($serializer, &$current_currency) {
+				$currencyArray = $serializer->toArray($currency);
+
+				// serializer doesn't see 'sign' because it is not a regular
+				// ObjectModel field.
+				$currencyArray['sign'] = $currency->sign;
+
+				$url = $this->context->link->getLanguageLink(
+					$this->context->language->id
+				);
+
+				$extraParams = [
+					'SubmitCurrency' => 1,
+					'id_currency' => $currency->id
+				];
+
+				$partialQueryString = http_build_query($extraParams);
+				$separator = empty(parse_url($url)['query']) ? '?' : '&';
+
+				$url .= $separator . $partialQueryString;
+
+				$currencyArray['url'] = $url;
+
+				if ($currency->id === $this->context->currency->id) {
+					$currencyArray['current'] = true;
+					$current_currency = $currencyArray;
+				} else {
+					$currencyArray['current'] = false;
+				}
+
+				return $currencyArray;
+			},
+			Currency::getCurrencies(true, true)
+		);
+
+		return [
+			'currencies' => $currencies,
+			'current_currency' => $current_currency
+		];
 	}
 
-	protected function _prepareHook($params)
+	public function renderWidget($hookName, array $configuration)
 	{
 		if (Configuration::get('PS_CATALOG_MODE'))
-			return false;
+			return '';
 
 		if (!Currency::isMultiCurrencyActivated())
-			return false;
+			return '';
 
-		$this->smarty->assign('blockcurrencies_sign', $this->context->currency->sign);
-	
-		return true;
-	}
-
-	/**
-	* Returns module content for header
-	*
-	* @param array $params Parameters
-	* @return string Content
-	*/
-	public function hookDisplayTop($params)
-	{
-		if ($this->_prepareHook($params))
-			return $this->display(__FILE__, 'blockcurrencies.tpl');
-	}
-
-	public function hookDisplayNav($params)
-	{
-			return $this->hookDisplayTop($params);
-	}
-
-	public function hookDisplayHeader($params)
-	{
-		if (Configuration::get('PS_CATALOG_MODE'))
-			return;
-		$this->context->controller->addCSS(($this->_path).'blockcurrencies.css', 'all');
+		$this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
+		return $this->display(__FILE__, 'blockcurrencies.tpl');
 	}
 }
-
-
