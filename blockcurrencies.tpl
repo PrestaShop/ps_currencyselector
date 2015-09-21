@@ -23,41 +23,13 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<!-- Block currencies module -->
-<script type="text/javascript">
-$(document).ready(function () {
-	$("#setCurrency").mouseover(function(){
-		$(this).addClass("countries_hover");
-		$(".currencies_ul").addClass("currencies_ul_hover");
-	});
-	$("#setCurrency").mouseout(function(){
-		$(this).removeClass("countries_hover");
-		$(".currencies_ul").removeClass("currencies_ul_hover");
-	});
-
-	$('ul#first-currencies li:not(.selected)').css('opacity', 0.3);
-	$('ul#first-currencies li:not(.selected)').hover(function(){
-		$(this).css('opacity', 1);
-	}, function(){
-		$(this).css('opacity', 0.3);
-	});
-});
-</script>
-
-<div id="currencies_block_top">
-	<form id="setCurrency" action="{$request_uri}" method="post">
-		<p>
-			<input type="hidden" name="id_currency" id="id_currency" value=""/>
-			<input type="hidden" name="SubmitCurrency" value="" />
-			{l s='Currency' mod='blockcurrencies'} : {$blockcurrencies_sign}
-		</p>
-		<ul id="first-currencies" class="currencies_ul">
-			{foreach from=$currencies key=k item=f_currency}
-				<li {if $cookie->id_currency == $f_currency.id_currency}class="selected"{/if}>
-					<a href="javascript:setCurrency({$f_currency.id_currency});" title="{$f_currency.name}" rel="nofollow">{$f_currency.sign}</a>
-				</li>
-			{/foreach}
-		</ul>
-	</form>
+<div class="currency-selector">
+  <span>{$current_currency.iso_code} {$current_currency.sign}</span>
+  <ul>
+    {foreach from=$currencies item=currency}
+      <li {if $currency.current} class="current" {/if}>
+        <a rel="nofollow" href="{$currency.url}">{$currency.iso_code} {$currency.sign}</a>
+      </li>
+    {/foreach}
+  </ul>
 </div>
-<!-- /Block currencies module -->
