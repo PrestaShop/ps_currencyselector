@@ -25,6 +25,7 @@
 */
 
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
+use PrestaShop\PrestaShop\Adapter\ObjectSerializer;
 
 if (!defined('_PS_VERSION_'))
 	exit;
@@ -49,7 +50,7 @@ class BlockCurrencies extends Module implements WidgetInterface
 	public function getWidgetVariables($hookName, array $configuration)
 	{
 		$current_currency = null;
-		$serializer = new Adapter_ObjectSerializer;
+		$serializer = new ObjectSerializer;
 		$currencies = array_map(
 			function ($currency) use ($serializer, &$current_currency) {
 				$currencyArray = $serializer->toArray($currency);
