@@ -30,13 +30,13 @@ use PrestaShop\PrestaShop\Adapter\ObjectPresenter;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class BlockCurrencies extends Module implements WidgetInterface
+class Ps_Currencyselector extends Module implements WidgetInterface
 {
 	public function __construct()
 	{
-		$this->name = 'blockcurrencies';
+		$this->name = 'ps_currencyselector';
 		$this->tab = 'front_office_features';
-		$this->version = '2.0.0';
+		$this->version = '1.0.0';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -102,6 +102,6 @@ class BlockCurrencies extends Module implements WidgetInterface
 			return '';
 
 		$this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
-		return $this->display(__FILE__, 'blockcurrencies.tpl');
+		return $this->display(__FILE__, 'ps_currencyselector.tpl');
 	}
 }
