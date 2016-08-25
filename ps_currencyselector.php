@@ -95,7 +95,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
 	public function renderWidget($hookName, array $configuration)
 	{
-		if (Configuration::get('PS_CATALOG_MODE'))
+		if (Configuration::isCatalogMode())
 			return '';
 
 		if (!Currency::isMultiCurrencyActivated())
