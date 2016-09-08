@@ -44,7 +44,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
 		$this->displayName = $this->l('Currency block');
 		$this->description = $this->l('Adds a block allowing customers to choose their preferred shopping currency.');
-		$this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+		$this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
 	}
 
 	public function getWidgetVariables($hookName, array $configuration)
