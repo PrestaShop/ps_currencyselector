@@ -102,6 +102,6 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 			return '';
 
 		$this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
-		return $this->display(__FILE__, 'ps_currencyselector.tpl');
+		return $this->fetch('module:ps_currencyselector/ps_currencyselector.tpl');
 	}
 }
