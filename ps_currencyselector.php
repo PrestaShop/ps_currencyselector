@@ -52,6 +52,16 @@ class Ps_Currencyselector extends Module implements WidgetInterface
         $this->templateFile = 'module:ps_currencyselector/ps_currencyselector.tpl';
     }
 
+    public function install()
+    {
+        return (parent::install()
+            && $this->registerHook('actionAdminCurrenciesControllerSaveAfter'));
+    }
+
+    public function hookActionAdminCurrenciesControllerSaveAfter($params) {
+        return parent::_clearCache($this->templateFile);
+    }
+
     public function getWidgetVariables($hookName, array $configuration)
     {
         $current_currency = null;
