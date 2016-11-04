@@ -27,81 +27,95 @@
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 use PrestaShop\PrestaShop\Adapter\ObjectPresenter;
 
-if (!defined('_PS_VERSION_'))
-	exit;
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class Ps_Currencyselector extends Module implements WidgetInterface
 {
-	public function __construct()
-	{
-		$this->name = 'ps_currencyselector';
-		$this->tab = 'front_office_features';
-		$this->version = '1.0.2';
-		$this->author = 'PrestaShop';
-		$this->need_instance = 0;
+    private $templateFile;
 
-		parent::__construct();
+    public function __construct()
+    {
+        $this->name = 'ps_currencyselector';
+        $this->author = 'PrestaShop';
+        $this->version = '1.0.2';
+        $this->need_instance = 0;
 
-		$this->displayName = $this->l('Currency block');
-		$this->description = $this->l('Adds a block allowing customers to choose their preferred shopping currency.');
-		$this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
-	}
+        parent::__construct();
 
-	public function getWidgetVariables($hookName, array $configuration)
-	{
-		$current_currency = null;
-		$serializer = new ObjectPresenter;
-		$currencies = array_map(
-			function ($currency) use ($serializer, &$current_currency) {
-				$currencyArray = $serializer->present($currency);
+        $this->displayName = $this->l('Currency block');
+        $this->description = $this->l('Adds a block allowing customers to choose their preferred shopping currency.');
 
-				// serializer doesn't see 'sign' because it is not a regular
-				// ObjectModel field.
-				$currencyArray['sign'] = $currency->sign;
+        $this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
 
-				$url = $this->context->link->getLanguageLink(
-					$this->context->language->id
-				);
+        $this->templateFile = 'module:ps_currencyselector/ps_currencyselector.tpl';
+    }
 
-				$extraParams = [
-					'SubmitCurrency' => 1,
-					'id_currency' => $currency->id
-				];
+    public function install()
+    {
+        return (parent::install()
+            && $this->registerHook('actionAdminCurrenciesControllerSaveAfter'));
+    }
 
-				$partialQueryString = http_build_query($extraParams);
-				$separator = empty(parse_url($url)['query']) ? '?' : '&';
+    public function hookActionAdminCurrenciesControllerSaveAfter($params) {
+        return parent::_clearCache($this->templateFile);
+    }
 
-				$url .= $separator . $partialQueryString;
+    public function getWidgetVariables($hookName, array $configuration)
+    {
+        $current_currency = null;
+        $serializer = new ObjectPresenter;
+        $currencies = array_map(
+            function ($currency) use ($serializer, &$current_currency) {
+                $currencyArray = $serializer->present($currency);
 
-				$currencyArray['url'] = $url;
+                // serializer doesn't see 'sign' because it is not a regular
+                // ObjectModel field.
+                $currencyArray['sign'] = $currency->sign;
 
-				if ($currency->id === $this->context->currency->id) {
-					$currencyArray['current'] = true;
-					$current_currency = $currencyArray;
-				} else {
-					$currencyArray['current'] = false;
-				}
+                $url = $this->context->link->getLanguageLink($this->context->language->id);
 
-				return $currencyArray;
-			},
-			Currency::getCurrencies(true, true)
-		);
+                $extraParams = array(
+                    'SubmitCurrency' => 1,
+                    'id_currency' => $currency->id
+                );
 
-		return [
-			'currencies' => $currencies,
-			'current_currency' => $current_currency
-		];
-	}
+                $partialQueryString = http_build_query($extraParams);
+                $separator = empty(parse_url($url)['query']) ? '?' : '&';
 
-	public function renderWidget($hookName, array $configuration)
-	{
-		if (Configuration::isCatalogMode())
-			return '';
+                $url .= $separator . $partialQueryString;
 
-		if (!Currency::isMultiCurrencyActivated())
-			return '';
+                $currencyArray['url'] = $url;
 
-		$this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
-		return $this->fetch('module:ps_currencyselector/ps_currencyselector.tpl');
-	}
+                if ($currency->id === $this->context->currency->id) {
+                    $currencyArray['current'] = true;
+                    $current_currency = $currencyArray;
+                } else {
+                    $currencyArray['current'] = false;
+                }
+
+                return $currencyArray;
+            },
+            Currency::getCurrencies(true, true)
+        );
+
+        return array(
+            'currencies' => $currencies,
+            'current_currency' => $current_currency
+        );
+    }
+
+    public function renderWidget($hookName, array $configuration)
+    {
+        if (Configuration::isCatalogMode() || !Currency::isMultiCurrencyActivated()) {
+            return false;
+        }
+
+        if (!$this->isCached($this->templateFile, $this->getCacheId('ps_currencyselector'))) {
+            $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
+        }
+
+        return $this->fetch($this->templateFile, $this->getCacheId('ps_currencyselector'));
+    }
 }
