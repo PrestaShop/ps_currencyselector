@@ -112,10 +112,8 @@ class Ps_Currencyselector extends Module implements WidgetInterface
             return false;
         }
 
-        if (!$this->isCached($this->templateFile, $this->getCacheId('ps_currencyselector'))) {
-            $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
-        }
+        $this->smarty->assign($this->getWidgetVariables($hookName, $configuration));
 
-        return $this->fetch($this->templateFile, $this->getCacheId('ps_currencyselector'));
+        return $this->fetch($this->templateFile);
     }
 }
