@@ -44,10 +44,10 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
         parent::__construct();
 
-        $this->displayName = $this->l('Currency block');
-        $this->description = $this->l('Adds a block allowing customers to choose their preferred shopping currency.');
+        $this->displayName = $this->trans('Currency block', array(), 'Modules.Currencyselector.Admin');
+        $this->description = $this->trans('Adds a block allowing customers to choose their preferred shopping currency.', array(), 'Modules.Currencyselector.Admin');
 
-        $this->ps_versions_compliancy = array('min' => '1.7.0.0', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.7.1.0', 'max' => _PS_VERSION_);
 
         $this->templateFile = 'module:ps_currencyselector/ps_currencyselector.tpl';
     }
