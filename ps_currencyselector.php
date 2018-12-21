@@ -58,7 +58,8 @@ class Ps_Currencyselector extends Module implements WidgetInterface
             && $this->registerHook('actionAdminCurrenciesControllerSaveAfter'));
     }
 
-    public function hookActionAdminCurrenciesControllerSaveAfter($params) {
+    public function hookActionAdminCurrenciesControllerSaveAfter($params)
+    {
         return parent::_clearCache($this->templateFile);
     }
 
