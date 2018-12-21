@@ -66,7 +66,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
     public function getWidgetVariables($hookName, array $configuration)
     {
         $current_currency = null;
-        $serializer = new ObjectPresenter;
+        $serializer = new ObjectPresenter();
         $currencies = array_map(
             function ($currency) use ($serializer, &$current_currency) {
                 $currencyArray = $serializer->present($currency);
