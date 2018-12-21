@@ -79,7 +79,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
                 $extraParams = [
                     'SubmitCurrency' => 1,
-                    'id_currency' => $currency->id
+                    'id_currency' => $currency->id,
                 ];
 
                 $partialQueryString = http_build_query($extraParams);
@@ -103,7 +103,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
         return [
             'currencies' => $currencies,
-            'current_currency' => $current_currency
+            'current_currency' => $current_currency,
         ];
     }
 
