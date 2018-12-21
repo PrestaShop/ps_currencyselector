@@ -27,7 +27,7 @@
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 use PrestaShop\PrestaShop\Adapter\ObjectPresenter;
 
-if (!defined('_PS_VERSION_')) {
+if ( ! defined('_PS_VERSION_')) {
     exit;
 }
 
@@ -108,7 +108,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
     public function renderWidget($hookName, array $configuration)
     {
-        if (Configuration::isCatalogMode() || !Currency::isMultiCurrencyActivated()) {
+        if (Configuration::isCatalogMode() || ! Currency::isMultiCurrencyActivated()) {
             return false;
         }
 
