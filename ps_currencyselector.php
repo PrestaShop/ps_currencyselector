@@ -33,6 +33,11 @@ if (!defined('_PS_VERSION_')) {
 
 class Ps_Currencyselector extends Module implements WidgetInterface
 {
+    /**
+     * @var string Name of the module running on PS 1.6.x. Used for data migration.
+     */
+    const PS_16_EQUIVALENT_MODULE = 'blockcurrencies';
+
     private $templateFile;
 
     public function __construct()
@@ -54,6 +59,14 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
     public function install()
     {
+        // Migrate data from 1.6 equivalent module (if applicable), then uninstall
+        if (Module::isInstalled(self::PS_16_EQUIVALENT_MODULE)) {
+            $oldModule = Module::getInstanceByName(self::PS_16_EQUIVALENT_MODULE);
+            if ($oldModule) {
+                $oldModule->uninstall();
+            }
+        }
+
         return parent::install()
             && $this->registerHook('actionAdminCurrenciesControllerSaveAfter');
     }
