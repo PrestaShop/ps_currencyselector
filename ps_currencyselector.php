@@ -88,9 +88,10 @@ class Ps_Currencyselector extends Module implements WidgetInterface
                         'id_currency' => $currency->id,
                     )
                 );
-                $newUrl = sprintf('%s://%s%s?%s',
+                $newUrl = sprintf('%s://%s%s%s?%s',
                     $parsedUrl['scheme'],
                     $parsedUrl['host'],
+                    isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '',
                     $parsedUrl['path'],
                     http_build_query($newParams)
                 );
