@@ -76,17 +76,27 @@ class Ps_Currencyselector extends Module implements WidgetInterface
 
                 $url = $this->context->link->getLanguageLink($this->context->language->id);
 
-                $extraParams = array(
-                    'SubmitCurrency' => 1,
-                    'id_currency' => $currency->id
+                $parsedUrl = parse_url($url);
+                $urlParams = array();
+                if (isset($parsedUrl['query'])) {
+                    parse_str($parsedUrl['query'], $urlParams);
+                }
+                $newParams = array_merge(
+                    $urlParams,
+                    array(
+                        'SubmitCurrency' => 1,
+                        'id_currency' => $currency->id,
+                    )
+                );
+                $newUrl = sprintf('%s://%s%s%s?%s',
+                    $parsedUrl['scheme'],
+                    $parsedUrl['host'],
+                    isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '',
+                    $parsedUrl['path'],
+                    http_build_query($newParams)
                 );
 
-                $partialQueryString = http_build_query($extraParams);
-                $separator = empty(parse_url($url)['query']) ? '?' : '&';
-
-                $url .= $separator . $partialQueryString;
-
-                $currencyArray['url'] = $url;
+                $currencyArray['url'] = $newUrl;
 
                 if ($currency->id === $this->context->currency->id) {
                     $currencyArray['current'] = true;
