@@ -8,6 +8,9 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+install:
+  - composer install
+
 script:
   # PHP syntax check
   - find . -type f -name '*.php' ! -path "./vendor/*" ! -path "./tests/*" -exec php -l -n {} \; | (! grep -v "No syntax errors detected")
