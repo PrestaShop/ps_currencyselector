@@ -1,0 +1,16 @@
+GitHub contributors:
+--------------------------------
+- Alex Sampaio
+- antoin_m
+- Francois Gaillard
+- Francois Gaillard
+- François-Marie de Jouvencel
+- Gregory Roussac
+- Jerome Nadaud
+- Jérôme Nadaud
+- Jonathan Lelievre
+- Julien Bourdeau
+- Krystian Podemski
+- Maxime Biloé
+- Mickaël Andrieu
+- Thomas Nabord
