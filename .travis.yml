@@ -1,0 +1,51 @@
+language: php
+
+php:
+  - 5.6
+  - 7.2
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+install:
+  - composer install
+
+script:
+  # PHP syntax check
+  - find . -type f -name '*.php' ! -path "./vendor/*" ! -path "./tests/*" -exec php -l -n {} \; | (! grep -v "No syntax errors detected")
+  # PHP cs fixer
+  - vendor/bin/php-cs-fixer fix --no-interaction --dry-run --diff
+
+before_deploy:
+  # Composer
+  - composer install --no-dev -o
+  # Cleanup
+  - rm -f .php_cs.*
+  - rm -f .travis.yml
+  - rm -f cloudbuild.yaml
+  - rm -f composer.*
+  - rm -f .gitignore
+  - rm -f deploy.sh
+  - rm -f vue.config.js
+  - rm -f yarn.lock
+  - rm -f .eslintrc.js
+  - rm -f .prettyci.composer.json
+  - rm -f .editorconfig
+  - rm -rf .git
+  - rm -rf _dev
+  - rm -rf tests
+  - rm -rf node_modules
+  - pushd $TRAVIS_BUILD_DIR/..
+  - mkdir /tmp/build
+  - zip /tmp/build/$(ls | head -1).zip -r $(ls | head -1)/
+  - popd
+
+deploy:
+  provider: releases
+  api_key: ${travis_api_key}
+  file: "/tmp/build/ps_currencyselector.zip"
+  skip_cleanup: true
+  on:
+    all_branches: true
+    tags: true
