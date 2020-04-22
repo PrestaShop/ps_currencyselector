@@ -28,7 +28,7 @@
   <ul>
     {foreach from=$currencies item=currency}
       <li {if $currency.current} class="current" {/if}>
-        <a rel="nofollow" href="{$currency.url}">{$currency.iso_code}{if $currency.sign !== $currency.iso_code} {$currency.sign}</a>
+        <a rel="nofollow" href="{$currency.url}">{$currency.iso_code}{if $currency.sign !== $currency.iso_code} {$currency.sign}{/if}</a>
       </li>
     {/foreach}
   </ul>
