@@ -2,7 +2,7 @@
 
 ## About
 
-Adds a block allowing customers to choose their preferred shopping currency.
+Offer your customers the possibility to buy matching items when on a product page.
 
 ## Multistore compatibility
 
