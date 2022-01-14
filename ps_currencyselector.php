@@ -38,6 +38,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
     public function __construct()
     {
         $this->name = 'ps_currencyselector';
+        $this->tab = 'front_office_features';
         $this->author = 'PrestaShop';
         $this->version = '2.0.1';
         $this->need_instance = 0;
