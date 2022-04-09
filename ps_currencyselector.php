@@ -48,7 +48,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
         $this->displayName = $this->trans('Currency block', [], 'Modules.Currencyselector.Admin');
         $this->description = $this->trans('Offer your customers the possibility to buy matching items when on a product page.', [], 'Modules.Currencyselector.Admin');
 
-        $this->ps_versions_compliancy = ['min' => '1.7.4.0', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '1.7.5.0', 'max' => _PS_VERSION_];
 
         $this->templateFile = 'module:ps_currencyselector/ps_currencyselector.tpl';
     }
