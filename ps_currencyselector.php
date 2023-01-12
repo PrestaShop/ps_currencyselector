@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-use PrestaShop\PrestaShop\Adapter\ObjectPresenter;
+use PrestaShop\PrestaShop\Adapter\Presenter\Object\ObjectPresenter;
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
 if (!defined('_PS_VERSION_')) {
@@ -38,16 +38,17 @@ class Ps_Currencyselector extends Module implements WidgetInterface
     public function __construct()
     {
         $this->name = 'ps_currencyselector';
+        $this->tab = 'front_office_features';
         $this->author = 'PrestaShop';
-        $this->version = '2.0.1';
+        $this->version = '2.1.0';
         $this->need_instance = 0;
 
         parent::__construct();
 
         $this->displayName = $this->trans('Currency block', [], 'Modules.Currencyselector.Admin');
-        $this->description = $this->trans('Adds a block allowing customers to choose their preferred shopping currency.', [], 'Modules.Currencyselector.Admin');
+        $this->description = $this->trans('Offer your customers the possibility to buy matching items when on a product page.', [], 'Modules.Currencyselector.Admin');
 
-        $this->ps_versions_compliancy = ['min' => '1.7.1.0', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '1.7.5.0', 'max' => _PS_VERSION_];
 
         $this->templateFile = 'module:ps_currencyselector/ps_currencyselector.tpl';
     }
@@ -58,7 +59,7 @@ class Ps_Currencyselector extends Module implements WidgetInterface
             && $this->registerHook('actionAdminCurrenciesControllerSaveAfter');
     }
 
-    public function hookActionAdminCurrenciesControllerSaveAfter($params)
+    public function hookActionAdminCurrenciesControllerSaveAfter()
     {
         return parent::_clearCache($this->templateFile);
     }
