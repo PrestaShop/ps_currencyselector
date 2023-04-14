@@ -2,7 +2,7 @@
 
 ## About
 
-Offer your customers the possibility to buy matching items when on a product page.
+Add a currency selector to help visitors from targeted countries purchase on your store.
 
 ## Multistore compatibility
 
