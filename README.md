@@ -4,6 +4,10 @@
 
 Add a currency selector to help visitors from targeted countries purchase on your store.
 
+## Compatibility
+
+PrestaShop: `1.7.5.0` or later
+
 ## Multistore compatibility
 
 This module is compatible with the multistore :heavy_check_mark: <br/>
